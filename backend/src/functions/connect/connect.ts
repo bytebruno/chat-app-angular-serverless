@@ -10,7 +10,7 @@ import {
 
 import { middyfy } from '@libs/lambda';
 
-const docClient = new AWS.DynamoDB.DocumentClient({endpoint: 'http://localhost:8000'});
+const docClient = new AWS.DynamoDB.DocumentClient({endpoint: 'http://localhost:15002'});
 
 const connectionsTable = process.env.CONNECTIONS_TABLE;
 

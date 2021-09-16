@@ -4,7 +4,7 @@ import * as AWS from 'aws-sdk';
 
 import { APIGatewayProxyEvent, APIGatewayProxyHandler, APIGatewayProxyResult } from 'aws-lambda';
 
-const docClient = new AWS.DynamoDB.DocumentClient({endpoint: 'http://localhost:8000'});
+const docClient = new AWS.DynamoDB.DocumentClient({endpoint: 'http://localhost:15002'});
 
 const connectionsTable = process.env.CONNECTIONS_TABLE;
 const stage = process.env.STAGE;
@@ -13,7 +13,7 @@ const apiId = process.env.API_ID;
 const connectionParams = {
   apiVersion: '2018-11-29',
   //endpoint: `${apiId}.execute-api.us-east-1.amazonaws.com/${stage}`,
-  endpoint: `localhost:3001/dev`,
+  endpoint: `http://localhost:3001`,
 };
 
 const apiGateway = new AWS.ApiGatewayManagementApi(connectionParams);
@@ -28,8 +28,10 @@ const sendMessage: APIGatewayProxyHandler = async (
       })
       .promise();
 
+    const body = JSON.parse(event.body)
+
     const payload = {
-      message: 'TESTANDO MENSAGEM'
+      message: body.message
     };
 
     for (const connection of connections.Items) {

@@ -15,7 +15,13 @@ const serverlessConfiguration: AWS = {
     dynamodb: {
       stages:[
         'dev'
-      ]
+      ],
+      start: {
+        port: 15002
+      }
+    },
+   'serverless-offline': {
+      httpPort: 15001
     }
   },
   plugins: ['serverless-webpack', 'serverless-offline','serverless-dynamodb-local'],
