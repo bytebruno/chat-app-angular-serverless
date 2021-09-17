@@ -1,4 +1,5 @@
 import type { AWS } from '@serverless/typescript';
+import auth from '@functions/auth';
 import connect from '@functions/connect';
 import disconnect from '@functions/disconnect';
 import hello from '@functions/hello';
@@ -58,7 +59,7 @@ const serverlessConfiguration: AWS = {
     ],
   },
   // import the function via paths
-  functions: { hello, connect, disconnect, sendMessage },
+  functions: { auth, hello, connect, disconnect, sendMessage },
   resources: {
     Resources: {
       ConnectionsDynamoDBTable: {

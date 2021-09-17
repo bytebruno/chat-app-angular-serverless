@@ -35,9 +35,6 @@ const sendMessage: APIGatewayProxyHandler = async (
 
   return {
     statusCode: 200,
-    headers: {
-      'Access-Control-Allow-Origin': '*',
-    },
     body: '',
   };
 };

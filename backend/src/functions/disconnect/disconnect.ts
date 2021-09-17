@@ -12,10 +12,9 @@ import { middyfy } from '@libs/lambda';
 const disconnect: APIGatewayProxyHandler = async (
   event: APIGatewayProxyEvent,
 ): Promise<APIGatewayProxyResult> => {
-
   const connectionId = event.requestContext.connectionId;
 
-  await deleteConnectionId(connectionId)
+  await deleteConnectionId(connectionId);
 
   return {
     statusCode: 200,

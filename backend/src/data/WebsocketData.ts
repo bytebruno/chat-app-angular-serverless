@@ -1,7 +1,9 @@
 import * as AWS from 'aws-sdk';
 
+import { createLogger } from '../utils/logger';
 import { deleteConnectionId } from '../business/ConnectionsBusiness';
 
+const logger = createLogger('messages');
 export class WebsocketData {
   constructor(
     private readonly apiGateway = createApiGatewayManagementApi(
@@ -12,21 +14,23 @@ export class WebsocketData {
 
   async sendMessage(connectionId, payload): Promise<any> {
     try {
-      console.log('Sending message to a connection', connectionId);
-
       await this.apiGateway
         .postToConnection({
           ConnectionId: connectionId,
           Data: JSON.stringify(payload),
         })
         .promise();
-    } catch (e) {
-      console.log('Failed to send message', JSON.stringify(e));
 
-      if (e.statusCode === 410) {
-        console.log('Stale connection');
+      logger.info('message sent ', {
+        connectionId: connectionId,
+        message: payload.message,
+      });
+    } catch (err) {
+      logger.info('message sent failure ', {
+        error: err,
+      });
 
-        // Todo: RESOLVER DEPENDENCIA DA BUSINESS DEPOIS
+      if (err.statusCode === 410) {
         await deleteConnectionId(connectionId);
       }
     }

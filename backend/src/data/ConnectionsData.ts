@@ -2,8 +2,11 @@ import * as AWS from 'aws-sdk';
 import * as AWSXRay from 'aws-xray-sdk';
 
 import { DocumentClient } from 'aws-sdk/clients/dynamodb';
+import { createLogger } from '../utils/logger';
 
 //const XAWS = AWSXRay.captureAWS(AWS);
+const logger = createLogger('connections');
+
 export class ConnectionsData {
   constructor(
     private readonly docClient: DocumentClient = createDynamoDBClient(),
@@ -33,24 +36,28 @@ export class ConnectionsData {
   }
 
   async deleteConnectionId(id: string): Promise<void> {
+    logger.info('user disconnected', {
+      connectionId: id,
+    });
+
     this.docClient.delete(
       {
         TableName: this.connectionsTable,
         Key: { id },
       },
       (err, data) => {
-        this.handleError(err, data);
+        if (err) {
+          logger.error('user disconnection', {
+            error: err,
+          });
+          throw new Error('Error ' + err);
+        } else {
+          logger.info('user disconnection', {
+            data: data,
+          });
+        }
       },
     );
-  }
-
-  handleError(err: any, data: any) {
-    if (err) {
-      console.log('ERROR ' + err);
-      throw new Error('Error ' + err);
-    } else {
-      console.log('Log: ' + data);
-    }
   }
 }
 
