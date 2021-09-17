@@ -1,18 +1,13 @@
 import 'source-map-support/register';
 
-import * as AWS from 'aws-sdk';
-
 import {
   APIGatewayProxyEvent,
   APIGatewayProxyHandler,
   APIGatewayProxyResult,
 } from 'aws-lambda';
 
+import { createConnectionId } from 'src/business/ConnectionsBusiness';
 import { middyfy } from '@libs/lambda';
-
-const docClient = new AWS.DynamoDB.DocumentClient({endpoint: 'http://localhost:15002'});
-
-const connectionsTable = process.env.CONNECTIONS_TABLE;
 
 const connect: APIGatewayProxyHandler = async (
   event: APIGatewayProxyEvent,
@@ -27,14 +22,7 @@ const connect: APIGatewayProxyHandler = async (
     timestamp,
   };
 
-  await docClient
-    .put({
-      TableName: connectionsTable,
-      Item: item,
-    })
-    .promise();
-
-    debugger
+  await createConnectionId(item)
 
   return {
     statusCode: 200,

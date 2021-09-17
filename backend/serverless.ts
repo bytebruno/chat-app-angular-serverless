@@ -13,23 +13,32 @@ const serverlessConfiguration: AWS = {
       includeModules: true,
     },
     dynamodb: {
-      stages:[
-        'dev'
-      ],
+      stages: ['dev'],
       start: {
-        port: 15002
-      }
+        port: 15002,
+      },
     },
-   'serverless-offline': {
-      httpPort: 15001
-    }
+    'serverless-offline': {
+      httpPort: 15001,
+    },
   },
-  plugins: ['serverless-webpack', 'serverless-offline','serverless-dynamodb-local'],
+  plugins: [
+    'serverless-webpack',
+    'serverless-offline',
+    'serverless-dynamodb-local',
+  ],
+  package: {
+    individually: true,
+  },
   provider: {
     name: 'aws',
     runtime: 'nodejs14.x',
     stage: 'dev',
     region: 'us-east-1',
+    // tracing: {
+    //   lambda: true,
+    //   apiGateway: true,
+    // },
     apiGateway: {
       minimumCompressionSize: 1024,
       shouldStartNameWithService: true,
@@ -61,8 +70,8 @@ const serverlessConfiguration: AWS = {
           BillingMode: 'PAY_PER_REQUEST',
         },
       },
-    }
-  }
+    },
+  },
 };
 
 module.exports = serverlessConfiguration;
