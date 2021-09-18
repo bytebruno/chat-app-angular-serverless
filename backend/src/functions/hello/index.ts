@@ -1,5 +1,5 @@
-import schema from './schema';
-import { handlerPath } from '@libs/handlerResolver';
+import { handlerPath } from '@libs/handlerResolver'
+import schema from './schema'
 
 export default {
   handler: `${handlerPath(__dirname)}/handler.main`,
@@ -8,12 +8,13 @@ export default {
       http: {
         method: 'post',
         path: 'hello',
+        authorizer: 'auth',
         request: {
           schema: {
-            'application/json': schema
-          }
-        }
-      }
-    }
-  ]
+            'application/json': schema,
+          },
+        },
+      },
+    },
+  ],
 }

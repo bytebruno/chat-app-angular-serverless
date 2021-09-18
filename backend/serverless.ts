@@ -1,9 +1,10 @@
-import type { AWS } from '@serverless/typescript';
-import auth from '@functions/auth';
-import connect from '@functions/connect';
-import disconnect from '@functions/disconnect';
-import hello from '@functions/hello';
-import sendMessage from '@functions/sendMessage';
+import type { AWS } from '@serverless/typescript'
+import auth from '@functions/auth'
+import connect from '@functions/connect'
+import disconnect from '@functions/disconnect'
+import handleUserLogin from '@functions/handleUserLogin'
+import hello from '@functions/hello'
+import sendMessage from '@functions/sendMessage'
 
 const serverlessConfiguration: AWS = {
   service: 'backend',
@@ -47,19 +48,12 @@ const serverlessConfiguration: AWS = {
     environment: {
       AWS_NODEJS_CONNECTION_REUSE_ENABLED: '1',
       CONNECTIONS_TABLE: 'Connections-${self:provider.stage}',
+      USER_INFO_TABLE: 'UserInfo-${self:provider.stage}',
     },
     lambdaHashingVersion: '20201221',
-    iamRoleStatements: [
-      {
-        Effect: 'Allow',
-        Action: ['dynamodb:Scan', 'dynamodb:PutItem', 'dynamodb:DeleteItem'],
-        Resource:
-          'arn:aws:dynamodb:${self:provider.region}:*:table/${self:provider.environment.CONNECTIONS_TABLE}',
-      },
-    ],
   },
   // import the function via paths
-  functions: { auth, hello, connect, disconnect, sendMessage },
+  functions: { auth, hello, connect, disconnect, sendMessage, handleUserLogin },
   resources: {
     Resources: {
       ConnectionsDynamoDBTable: {
@@ -71,8 +65,19 @@ const serverlessConfiguration: AWS = {
           BillingMode: 'PAY_PER_REQUEST',
         },
       },
+      UserInfoDynamoDBTable: {
+        Type: 'AWS::DynamoDB::Table',
+        Properties: {
+          TableName: '${self:provider.environment.USER_INFO_TABLE}',
+          AttributeDefinitions: [
+            { AttributeName: 'userId', AttributeType: 'S' },
+          ],
+          KeySchema: [{ AttributeName: 'userId', KeyType: 'HASH' }],
+          BillingMode: 'PAY_PER_REQUEST',
+        },
+      },
     },
   },
-};
+}
 
-module.exports = serverlessConfiguration;
+module.exports = serverlessConfiguration
