@@ -8,11 +8,11 @@ const routes = [
     path: '',
     component: Auth0LoginComponent,
   },
-  // {
-  //   path: 'weather',
-  //   loadChildren: () =>
-  //     import('./features/weather/weather.module').then((m) => m.WeatherModule),
-  // },
+  {
+    path: 'chat',
+    loadChildren: () =>
+      import('./features/chat/chat.module').then((m) => m.ChatModule),
+  },
   {
     path: '**',
     redirectTo: '',

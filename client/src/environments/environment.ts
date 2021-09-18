@@ -6,6 +6,8 @@ export const environment = {
   production: false,
   auth0Domain: 'dev-iubhvavp.us.auth0.com',
   auth0ClientId: 'wanWJnwVUzARKvRHiF7sTcweYBapWgth',
+  apiUrl: 'http://localhost:15001',
+  websocketUrl: 'ws://localhost:3001',
 };
 
 /*
