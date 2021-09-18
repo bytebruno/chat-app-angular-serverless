@@ -13,7 +13,6 @@ export class Auth0LoginComponent implements OnInit {
 
   ngOnInit(): void {
     this.auth.isAuthenticated$.subscribe((isAuthenticated) => {
-      console.log('TENTOU NAVEGAR');
       if (isAuthenticated) this.router.navigateByUrl('/chat');
     });
   }

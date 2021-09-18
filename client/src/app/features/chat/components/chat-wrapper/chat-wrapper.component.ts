@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
-import { catchError, map, tap } from 'rxjs/operators';
 
-import { WebsocketManagementService } from '../websocket-management.service';
+import { UserInformationService } from '../../services/user-information.service';
+import { WebsocketManagementService } from '../../services/websocket-management.service';
 
 @Component({
   selector: 'app-chat-wrapper',
@@ -9,9 +9,16 @@ import { WebsocketManagementService } from '../websocket-management.service';
   styleUrls: ['./chat-wrapper.component.scss'],
 })
 export class ChatWrapperComponent implements OnInit {
-  constructor(private wsService: WebsocketManagementService) {}
+  constructor(
+    private wsService: WebsocketManagementService,
+    private userInformationService: UserInformationService
+  ) {}
 
   ngOnInit(): void {
+    this.initializeWebsocketConnection().retrieveUserInformation();
+  }
+
+  private initializeWebsocketConnection() {
     const wsSubject = this.wsService.connect();
 
     if (wsSubject) {
@@ -21,5 +28,12 @@ export class ChatWrapperComponent implements OnInit {
         () => console.log('complete') // Called when connection is closed (for whatever reason).
       );
     }
+    return this;
+  }
+
+  private retrieveUserInformation() {
+    this.userInformationService
+      .getOneUserInfo()
+      .subscribe((x) => console.log('USER INFORMATION: ', x));
   }
 }
