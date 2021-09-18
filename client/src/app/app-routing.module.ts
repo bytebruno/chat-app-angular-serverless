@@ -1,13 +1,13 @@
+import { Auth0LoginComponent } from './core/auth/auth0-login/auth0-login.component';
 import { CommonModule } from '@angular/common';
 import { NgModule } from '@angular/core';
 import { RouterModule } from '@angular/router';
 
 const routes = [
-  // {
-  //   path: '',
-  //   pathMatch: 'full',
-  //   redirectTo: 'weather',
-  // },
+  {
+    path: '',
+    component: Auth0LoginComponent,
+  },
   // {
   //   path: 'weather',
   //   loadChildren: () =>
