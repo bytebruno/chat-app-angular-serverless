@@ -36,6 +36,26 @@ export class UserInfoData {
 
     return user
   }
+
+  async updateUserInfo(userInfo: any): Promise<any> {
+    this.docClient
+      .update({
+        TableName: this.userInfoTable,
+        Key: {
+          userId: userInfo.userId,
+        },
+        UpdateExpression: 'set #name = :n',
+        ExpressionAttributeValues: {
+          ':n': userInfo.name,
+        },
+        ExpressionAttributeNames: {
+          '#name': 'name',
+        },
+      })
+      .promise()
+
+    return userInfo
+  }
 }
 
 function createDynamoDBClient() {

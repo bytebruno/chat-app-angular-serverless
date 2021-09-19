@@ -1,6 +1,14 @@
-import { ChangeDetectorRef, Component, OnInit } from '@angular/core';
+import {
+  ChangeDetectorRef,
+  Component,
+  ElementRef,
+  Inject,
+  OnInit,
+  ViewChild,
+} from '@angular/core';
 
-import { MenuItem } from 'primeng/api';
+import { AuthService } from '@auth0/auth0-angular';
+import { Router } from '@angular/router';
 import { UserInformationService } from '../../services/user-information.service';
 import { WebsocketManagementService } from '../../services/websocket-management.service';
 
@@ -10,25 +18,56 @@ import { WebsocketManagementService } from '../../services/websocket-management.
   styleUrls: ['./chat-wrapper.component.scss'],
 })
 export class ChatWrapperComponent implements OnInit {
-  public message: { name: string; message: string } = {
+  @ViewChild('scp', { static: true }) scrollContainer: any;
+
+  public showUpdateModal = false;
+
+  public message: { name: string | undefined; message: string } = {
     name: 'Bruno',
     message: '',
   };
   public messages: any = [];
+  public userInfo: any = { name: '', userId: '' };
 
   constructor(
     private wsService: WebsocketManagementService,
     private userInformationService: UserInformationService,
-    private cd: ChangeDetectorRef
+    private cd: ChangeDetectorRef,
+    private router: Router,
+    private auth: AuthService
   ) {}
 
   ngOnInit(): void {
     this.initializeWebsocketConnection().retrieveUserInformation();
+    this.auth.isAuthenticated$.subscribe((isAuthenticated) => {
+      if (!isAuthenticated) this.router.navigateByUrl('/');
+    });
+    this.auth.user$.subscribe((user) => {
+      console.log(user);
+      this.userInfo.name = user?.name;
+      this.message.name = this.userInfo.name;
+      this.cd.detectChanges();
+    });
   }
 
   public sendMessage() {
     this.wsService.send(this.message);
-    this.message = { name: 'Bruno', message: '' };
+    this.message = { ...this.message, message: '' };
+  }
+
+  public saveUserInfo() {
+    debugger;
+    if (this.userInfo.userId === '') return;
+    this.userInformationService
+      .updateUserInfo(this.userInfo)
+      .subscribe((userInfo: any) => {
+        this.setUserInfoValues(userInfo);
+      });
+    this.showUpdateModal = false;
+  }
+
+  public logout() {
+    this.auth.logout({ returnTo: 'http://localhost:4200' });
   }
 
   private initializeWebsocketConnection() {
@@ -46,13 +85,26 @@ export class ChatWrapperComponent implements OnInit {
 
   private processMessage(msg: any) {
     console.log('Process message: ', msg);
+    if (msg.name === this.userInfo.name) {
+      msg.mine = true;
+    }
     this.messages.push(msg);
     this.cd.detectChanges();
+    console.log(this.scrollContainer.calculateContainerHeight());
+
+    // this.scrollContainer.scrollTop = 100000;
+    // debugger;
   }
 
   private retrieveUserInformation() {
-    this.userInformationService
-      .getOneUserInfo()
-      .subscribe((x) => console.log('USER INFORMATION: ', x));
+    this.userInformationService.getOneUserInfo().subscribe((userInfo: any) => {
+      this.setUserInfoValues(userInfo);
+    });
+  }
+
+  private setUserInfoValues(userInfo: any) {
+    this.userInfo = { ...this.userInfo, ...userInfo };
+    this.message = { ...this.message, name: userInfo.name };
+    this.cd.detectChanges();
   }
 }

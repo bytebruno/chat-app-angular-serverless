@@ -14,4 +14,8 @@ export class UserInformationService {
   getOneUserInfo(): Observable<any> {
     return this.http.get<any>(`${environment.apiUrl}/user`);
   }
+
+  updateUserInfo(userInfo: any): Observable<any> {
+    return this.http.post<any>(`${environment.apiUrl}/user`, userInfo);
+  }
 }

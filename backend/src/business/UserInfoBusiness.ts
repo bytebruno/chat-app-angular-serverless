@@ -9,3 +9,7 @@ export const getOneUserInfo = async (userId: string): Promise<any> => {
 export const createUserInfo = async (userId: string): Promise<any> => {
   return userInfoData.createUserInfo(userId)
 }
+
+export const updateUserInfo = async (userInfo: any): Promise<any> => {
+  return userInfoData.updateUserInfo(userInfo)
+}

@@ -5,6 +5,7 @@ import disconnect from '@functions/disconnect'
 import handleUserLogin from '@functions/handleUserLogin'
 import hello from '@functions/hello'
 import sendMessage from '@functions/sendMessage'
+import updateUserInfo from '@functions/updateUserInfo'
 
 const serverlessConfiguration: AWS = {
   service: 'backend',
@@ -53,7 +54,15 @@ const serverlessConfiguration: AWS = {
     lambdaHashingVersion: '20201221',
   },
   // import the function via paths
-  functions: { auth, hello, connect, disconnect, sendMessage, handleUserLogin },
+  functions: {
+    auth,
+    hello,
+    connect,
+    disconnect,
+    sendMessage,
+    handleUserLogin,
+    updateUserInfo,
+  },
   resources: {
     Resources: {
       ConnectionsDynamoDBTable: {

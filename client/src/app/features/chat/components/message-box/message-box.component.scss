@@ -5,3 +5,11 @@
     padding: 0;
   }
 }
+
+:host {
+  .mine {
+    ::ng-deep .p-card {
+      background-color: #1e4479;
+    }
+  }
+}

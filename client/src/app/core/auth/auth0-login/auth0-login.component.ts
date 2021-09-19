@@ -19,7 +19,7 @@ export class Auth0LoginComponent implements OnInit {
 
   public redirectToLogin() {
     this.auth.loginWithRedirect({
-      redirect_uri: 'http://localhost:4200',
+      appState: '/chat',
     });
   }
 }

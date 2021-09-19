@@ -1,12 +1,28 @@
 <div class="grid pt-6">
   <div class="col-10 col-offset-1">
-    <p-panel header="Chat - Fulano" [toggleable]="true">
-      <ng-template pTemplate="icons"> </ng-template>
-      <p-scrollPanel [style]="{ width: '100%', height: '50vh' }">
+    <p-panel header="Chat - {{ userInfo.name }}">
+      <ng-template pTemplate="icons">
+        <button
+          pButton
+          type="button"
+          class="p-button-raised p-button-secondary mr-3"
+          label="Update your profile"
+          (click)="showUpdateModal = true"
+        ></button>
+        <button
+          pButton
+          type="button"
+          class="p-button-outlined p-button-danger"
+          label="Logout"
+          (click)="logout()"
+        ></button
+      ></ng-template>
+      <p-scrollPanel #scp [style]="{ width: '100%', height: '50vh' }">
         <div *ngFor="let message of messages" class="mt-4">
           <app-message-box
             [name]="message.name"
             [message]="message.message"
+            [mine]="message.mine"
           ></app-message-box>
         </div>
       </p-scrollPanel>
@@ -32,3 +48,30 @@
     </p-panel>
   </div>
 </div>
+
+<p-dialog
+  header="Update your information"
+  [(visible)]="showUpdateModal"
+  [modal]="true"
+  [breakpoints]="{ '960px': '75vw', '640px': '90vw' }"
+  [style]="{ width: '50vw' }"
+>
+  <div class="p-inputgroup">
+    <span class="p-inputgroup-addon"><i class="pi pi-user"></i></span>
+    <input
+      type="text"
+      pInputText
+      placeholder="Nickname"
+      [(ngModel)]="userInfo.name"
+    />
+  </div>
+  <ng-template pTemplate="footer">
+    <button
+      pButton
+      type="button"
+      class="p-button-raised p-button-success"
+      label="Save"
+      (click)="saveUserInfo()"
+    ></button>
+  </ng-template>
+</p-dialog>

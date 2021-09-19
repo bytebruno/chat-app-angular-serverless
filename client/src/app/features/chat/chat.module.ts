@@ -4,6 +4,7 @@ import { CardModule } from 'primeng/card';
 import { ChatRoutingModule } from './chat-routing.module';
 import { ChatWrapperComponent } from './components/chat-wrapper/chat-wrapper.component';
 import { CommonModule } from '@angular/common';
+import { DialogModule } from 'primeng/dialog';
 import { DividerModule } from 'primeng/divider';
 import { FormsModule } from '@angular/forms';
 import { InputTextModule } from 'primeng/inputtext';
@@ -20,6 +21,7 @@ import { ScrollPanelModule } from 'primeng/scrollpanel';
     ButtonModule,
     CardModule,
     CommonModule,
+    DialogModule,
     DividerModule,
     InputTextModule,
     MenuModule,
