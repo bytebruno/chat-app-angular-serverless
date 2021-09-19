@@ -1,4 +1,17 @@
-<p-card [header]="name" [ngClass]="{ mine: mine }">
+<p-card [ngClass]="{ mine: mine }">
+  <!-- <ng-template pTemplate="header" class="p-card-title">
+  </ng-template> -->
+  <div class="p-card-title">
+    <p-avatar
+      icon="pi pi-user"
+      *ngIf="!imageUrl"
+      size="large"
+      [style]="{ 'background-color': '#64B5F6', color: '#ffffff' }"
+    ></p-avatar>
+    <p-avatar label="user.png" *ngIf="imageUrl"></p-avatar>
+    {{ name }}
+  </div>
+
   {{ message }}
   <!-- <ng-template pTemplate="footer"> Footer content here </ng-template> -->
 </p-card>

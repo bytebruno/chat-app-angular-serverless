@@ -1,6 +1,19 @@
 <div class="grid pt-6">
   <div class="col-10 col-offset-1">
-    <p-panel header="Chat - {{ userInfo.name }}">
+    <p-panel>
+      <ng-template pTemplate="header">
+        <div>
+          <p-avatar
+            icon="pi pi-user"
+            *ngIf="!userInfo?.imageUrl"
+            [style]="{ 'background-color': '#64B5F6', color: '#ffffff' }"
+            class="mr-2"
+          ></p-avatar>
+          <p-avatar label="user.png" *ngIf="userInfo?.imageUrl"></p-avatar> Chat
+          -
+          {{ userInfo.name }}
+        </div>
+      </ng-template>
       <ng-template pTemplate="icons">
         <button
           pButton

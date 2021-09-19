@@ -9,6 +9,7 @@ export class MessageBoxComponent implements OnInit {
   @Input() name: string = '';
   @Input() message: string = '';
   @Input() mine: boolean = false;
+  @Input() imageUrl: string | null = null;
 
   constructor() {}
 

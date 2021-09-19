@@ -1,11 +1,4 @@
-import {
-  ChangeDetectorRef,
-  Component,
-  ElementRef,
-  Inject,
-  OnInit,
-  ViewChild,
-} from '@angular/core';
+import { ChangeDetectorRef, Component, OnInit, ViewChild } from '@angular/core';
 
 import { AuthService } from '@auth0/auth0-angular';
 import { Router } from '@angular/router';
@@ -27,7 +20,7 @@ export class ChatWrapperComponent implements OnInit {
     message: '',
   };
   public messages: any = [];
-  public userInfo: any = { name: '', userId: '' };
+  public userInfo: any = { name: '', userId: '', imageUrl: null };
 
   constructor(
     private wsService: WebsocketManagementService,
@@ -56,7 +49,6 @@ export class ChatWrapperComponent implements OnInit {
   }
 
   public saveUserInfo() {
-    debugger;
     if (this.userInfo.userId === '') return;
     this.userInformationService
       .updateUserInfo(this.userInfo)
@@ -104,7 +96,10 @@ export class ChatWrapperComponent implements OnInit {
 
   private setUserInfoValues(userInfo: any) {
     this.userInfo = { ...this.userInfo, ...userInfo };
-    this.message = { ...this.message, name: userInfo.name };
+    this.message = {
+      ...this.message,
+      name: userInfo.name ?? this.message.name,
+    };
     this.cd.detectChanges();
   }
 }
