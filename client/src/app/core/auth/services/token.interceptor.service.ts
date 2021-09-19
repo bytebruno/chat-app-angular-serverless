@@ -26,7 +26,6 @@ export class TokenInterceptor implements HttpInterceptor {
     this.auth.idTokenClaims$.subscribe((idTokenClaims) => {
       this.idToken = idTokenClaims?.__raw;
       this._refreshSubject.next(this.idToken);
-      debugger;
     });
   }
 

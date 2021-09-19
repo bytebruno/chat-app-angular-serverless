@@ -20,4 +20,12 @@ export class WebsocketManagementService {
     }
     return this.subject;
   }
+
+  public send(message: any) {
+    this.subject.next({
+      action: 'sendMessage',
+      name: message.name,
+      message: message.message,
+    });
+  }
 }
