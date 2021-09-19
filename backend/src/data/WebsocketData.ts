@@ -1,9 +1,9 @@
-import * as AWS from 'aws-sdk';
+import * as AWS from 'aws-sdk'
 
-import { createLogger } from '../utils/logger';
-import { deleteConnectionId } from '../business/ConnectionsBusiness';
+import { createLogger } from '../utils/logger'
+import { deleteConnectionId } from '../business/ConnectionsBusiness'
 
-const logger = createLogger('messages');
+const logger = createLogger('messages')
 export class WebsocketData {
   constructor(
     private readonly apiGateway = createApiGatewayManagementApi(
@@ -19,19 +19,20 @@ export class WebsocketData {
           ConnectionId: connectionId,
           Data: JSON.stringify(payload),
         })
-        .promise();
+        .promise()
 
       logger.info('message sent ', {
         connectionId: connectionId,
         message: payload.message,
-      });
+        name: payload.name,
+      })
     } catch (err) {
       logger.info('message sent failure ', {
         error: err,
-      });
+      })
 
       if (err.statusCode === 410) {
-        await deleteConnectionId(connectionId);
+        await deleteConnectionId(connectionId)
       }
     }
   }
@@ -41,13 +42,13 @@ const createApiGatewayManagementApi = (stage: string, apiId: string) => {
   const connectionParams = {
     apiVersion: '2018-11-29',
     endpoint: `${apiId}.execute-api.us-east-1.amazonaws.com/${stage}`,
-  };
+  }
 
   // if (process.env.IS_OFFLINE) {
-  console.log('Creating a local createApiGatewayManagementApi instance');
-  connectionParams.endpoint = `http://localhost:3001`;
-  return new AWS.ApiGatewayManagementApi(connectionParams);
+  console.log('Creating a local createApiGatewayManagementApi instance')
+  connectionParams.endpoint = `http://localhost:3001`
+  return new AWS.ApiGatewayManagementApi(connectionParams)
   // }
 
-  return new AWS.ApiGatewayManagementApi(connectionParams);
-};
+  return new AWS.ApiGatewayManagementApi(connectionParams)
+}
