@@ -4,6 +4,7 @@ import { AuthService } from '@auth0/auth0-angular';
 import { Router } from '@angular/router';
 import { UserInformationService } from '../../services/user-information.service';
 import { WebsocketManagementService } from '../../services/websocket-management.service';
+import { mergeMap } from 'rxjs/operators';
 
 @Component({
   selector: 'app-chat-wrapper',
@@ -14,13 +15,19 @@ export class ChatWrapperComponent implements OnInit {
   @ViewChild('scp', { static: true }) scrollContainer: any;
 
   public showUpdateModal = false;
+  public fileToUpload: File | null = null;
 
-  public message: { name: string | undefined; message: string } = {
-    name: 'Bruno',
+  public message: {
+    name: string | undefined;
+    message: string;
+    avatarUrl: string;
+  } = {
+    name: '',
     message: '',
+    avatarUrl: '',
   };
   public messages: any = [];
-  public userInfo: any = { name: '', userId: '', imageUrl: null };
+  public userInfo: any = { name: '', userId: '', avatarUrl: null };
 
   constructor(
     private wsService: WebsocketManagementService,
@@ -48,18 +55,50 @@ export class ChatWrapperComponent implements OnInit {
     this.message = { ...this.message, message: '' };
   }
 
-  public saveUserInfo() {
+  public saveUserInfo(uploader: any) {
     if (this.userInfo.userId === '') return;
-    this.userInformationService
-      .updateUserInfo(this.userInfo)
-      .subscribe((userInfo: any) => {
-        this.setUserInfoValues(userInfo);
-      });
+
+    if (this.fileToUpload) {
+      this.userInformationService
+        .getUploadUrl()
+        .pipe(
+          mergeMap((res) =>
+            this.userInformationService.uploadFile(
+              res.uploadUrl,
+              this.fileToUpload
+            )
+          ),
+          mergeMap(() => {
+            return this.userInformationService.updateUserInfo(this.userInfo);
+          })
+        )
+        .subscribe((userinfo) => {
+          this.setUserInfoValues(userinfo);
+          uploader.clear();
+        });
+    } else {
+      this.userInformationService
+        .updateUserInfo(this.userInfo)
+        .subscribe((userInfo: any) => {
+          this.setUserInfoValues(userInfo);
+        });
+    }
+
     this.showUpdateModal = false;
   }
 
   public logout() {
     this.auth.logout({ returnTo: 'http://localhost:4200' });
+  }
+
+  public handleFileSelect(files: any) {
+    console.log(files[0]);
+    this.fileToUpload = files[0];
+  }
+
+  public handleFileRemove() {
+    this.fileToUpload = null;
+    console.log(this.fileToUpload);
   }
 
   private initializeWebsocketConnection() {
@@ -99,6 +138,7 @@ export class ChatWrapperComponent implements OnInit {
     this.message = {
       ...this.message,
       name: userInfo.name ?? this.message.name,
+      avatarUrl: userInfo.avatarUrl ?? this.message.avatarUrl,
     };
     this.cd.detectChanges();
   }

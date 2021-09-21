@@ -4,11 +4,17 @@
   <div class="p-card-title">
     <p-avatar
       icon="pi pi-user"
-      *ngIf="!imageUrl"
+      *ngIf="!avatarUrl"
       size="large"
+      shape="circle"
       [style]="{ 'background-color': '#64B5F6', color: '#ffffff' }"
     ></p-avatar>
-    <p-avatar label="user.png" *ngIf="imageUrl"></p-avatar>
+    <p-avatar
+      [image]="avatarUrl"
+      size="large"
+      shape="circle"
+      *ngIf="avatarUrl"
+    ></p-avatar>
     {{ name }}
   </div>
 

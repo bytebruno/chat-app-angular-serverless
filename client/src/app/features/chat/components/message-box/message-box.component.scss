@@ -4,6 +4,12 @@
   .p-card-content {
     padding: 0;
   }
+
+  .p-card-title {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+  }
 }
 
 :host {

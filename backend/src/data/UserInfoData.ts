@@ -1,16 +1,17 @@
-import * as AWS from 'aws-sdk'
-import * as AWSXRay from 'aws-xray-sdk'
+import * as AWS from 'aws-sdk';
+import * as AWSXRay from 'aws-xray-sdk';
 
-import { DocumentClient } from 'aws-sdk/clients/dynamodb'
-import { createLogger } from '../utils/logger'
+import { DocumentClient } from 'aws-sdk/clients/dynamodb';
+import { createLogger } from '../utils/logger';
 
 //const XAWS = AWSXRay.captureAWS(AWS);
-const logger = createLogger('userInfo')
+const logger = createLogger('userInfo');
 
 export class UserInfoData {
   constructor(
     private readonly docClient: DocumentClient = createDynamoDBClient(),
     private readonly userInfoTable = process.env.USER_INFO_TABLE,
+    private readonly bucketName = process.env.AVATAR_IMAGE_S3_BUCKET,
   ) {}
 
   async getOneUserInfo(userId: string): Promise<any> {
@@ -22,23 +23,23 @@ export class UserInfoData {
           ':userId': userId,
         },
       })
-      .promise()
+      .promise();
   }
 
   async createUserInfo(userId: string): Promise<any> {
-    const user = { userId }
+    const user = { userId };
     this.docClient
       .put({
         TableName: this.userInfoTable,
         Item: user,
       })
-      .promise()
+      .promise();
 
-    return user
+    return user;
   }
 
   async updateUserInfo(userInfo: any): Promise<any> {
-    this.docClient
+    await this.docClient
       .update({
         TableName: this.userInfoTable,
         Key: {
@@ -52,9 +53,28 @@ export class UserInfoData {
           '#name': 'name',
         },
       })
-      .promise()
+      .promise();
 
-    return userInfo
+    return this.getOneUserInfo(userInfo.userId);
+  }
+
+  async updateUserInfoAvatarUrl(userId: string, imageId: string): Promise<any> {
+    this.docClient
+      .update({
+        TableName: this.userInfoTable,
+        Key: {
+          userId: userId,
+        },
+        UpdateExpression: 'set #avatarUrl = :avatarUrl',
+        ExpressionAttributeValues: {
+          //':avatarUrl': `https://${this.bucketName}.s3.amazonaws.com/${imageId}`,
+          ':avatarUrl': `http://localhost:4569/${this.bucketName}/${imageId}`, // remove comments to test locally
+        },
+        ExpressionAttributeNames: {
+          '#avatarUrl': 'avatarUrl',
+        },
+      })
+      .promise();
   }
 }
 
@@ -69,5 +89,5 @@ function createDynamoDBClient() {
 
   return new AWS.DynamoDB.DocumentClient({
     endpoint: 'http://localhost:15002',
-  })
+  });
 }

@@ -2,15 +2,20 @@
   <div class="col-10 col-offset-1">
     <p-panel>
       <ng-template pTemplate="header">
-        <div>
+        <div class="header-avatar">
           <p-avatar
             icon="pi pi-user"
-            *ngIf="!userInfo?.imageUrl"
+            *ngIf="!userInfo?.avatarUrl"
+            shape="circle"
             [style]="{ 'background-color': '#64B5F6', color: '#ffffff' }"
             class="mr-2"
           ></p-avatar>
-          <p-avatar label="user.png" *ngIf="userInfo?.imageUrl"></p-avatar> Chat
-          -
+          <p-avatar
+            [image]="userInfo?.avatarUrl"
+            shape="circle"
+            *ngIf="userInfo?.avatarUrl"
+          ></p-avatar>
+          Chat -
           {{ userInfo.name }}
         </div>
       </ng-template>
@@ -36,6 +41,7 @@
             [name]="message.name"
             [message]="message.message"
             [mine]="message.mine"
+            [avatarUrl]="message.avatarUrl"
           ></app-message-box>
         </div>
       </p-scrollPanel>
@@ -69,7 +75,7 @@
   [breakpoints]="{ '960px': '75vw', '640px': '90vw' }"
   [style]="{ width: '50vw' }"
 >
-  <div class="p-inputgroup">
+  <div class="p-inputgroup mb-4">
     <span class="p-inputgroup-addon"><i class="pi pi-user"></i></span>
     <input
       type="text"
@@ -77,14 +83,38 @@
       placeholder="Nickname"
       [(ngModel)]="userInfo.name"
     />
+    <!-- <p-fileUpload
+      mode="basic"
+      name="myfile[]"
+      [customUpload]="true"
+      accept="image/*"
+      [maxFileSize]="1000000"
+      chooseLabel="Change Avatar"
+      (uploadHandler)="handleFileInput($event)"
+    ></p-fileUpload> -->
   </div>
+
+  <p-fileUpload
+    name="myfile[]"
+    accept="image/*"
+    [customUpload]="true"
+    chooseLabel="Change Avatar"
+    chooseIcon="pi pi-upload"
+    (onSelect)="handleFileSelect($event.currentFiles)"
+    (onRemove)="handleFileRemove()"
+    (onClear)="handleFileRemove()"
+    [showUploadButton]="false"
+    #uploader
+  >
+  </p-fileUpload>
+
   <ng-template pTemplate="footer">
     <button
       pButton
       type="button"
       class="p-button-raised p-button-success"
       label="Save"
-      (click)="saveUserInfo()"
+      (click)="saveUserInfo(uploader)"
     ></button>
   </ng-template>
 </p-dialog>

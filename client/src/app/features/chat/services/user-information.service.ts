@@ -18,4 +18,12 @@ export class UserInformationService {
   updateUserInfo(userInfo: any): Observable<any> {
     return this.http.post<any>(`${environment.apiUrl}/user`, userInfo);
   }
+
+  getUploadUrl(): Observable<any> {
+    return this.http.get<any>(`${environment.apiUrl}/user/avatar`);
+  }
+
+  uploadFile(signedUrl: string, file: any): Observable<any> {
+    return this.http.put<any>(signedUrl, file);
+  }
 }

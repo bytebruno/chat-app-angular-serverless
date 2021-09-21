@@ -6,6 +6,7 @@ import { ChatWrapperComponent } from './components/chat-wrapper/chat-wrapper.com
 import { CommonModule } from '@angular/common';
 import { DialogModule } from 'primeng/dialog';
 import { DividerModule } from 'primeng/divider';
+import { FileUploadModule } from 'primeng/fileupload';
 import { FormsModule } from '@angular/forms';
 import { InputTextModule } from 'primeng/inputtext';
 import { MenuModule } from 'primeng/menu';
@@ -29,6 +30,7 @@ import { ScrollPanelModule } from 'primeng/scrollpanel';
     ChatRoutingModule,
     ScrollPanelModule,
     FormsModule,
+    FileUploadModule,
   ],
 })
 export class ChatModule {}

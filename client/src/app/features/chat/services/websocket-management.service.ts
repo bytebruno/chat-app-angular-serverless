@@ -26,6 +26,7 @@ export class WebsocketManagementService {
       action: 'sendMessage',
       name: message.name,
       message: message.message,
+      avatarUrl: message.avatarUrl,
     });
   }
 }

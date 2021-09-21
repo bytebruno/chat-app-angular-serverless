@@ -1,13 +1,13 @@
-import 'source-map-support/register'
+import 'source-map-support/register';
 
 import {
   APIGatewayProxyEvent,
   APIGatewayProxyHandler,
   APIGatewayProxyResult,
-} from 'aws-lambda'
+} from 'aws-lambda';
 
-import { middyfy } from '@libs/lambda'
-import { updateUserInfo as updateUser } from 'src/business/UserInfoBusiness'
+import { middyfy } from '@libs/lambda';
+import { updateUserInfo as updateUser } from 'src/business/UserInfoBusiness';
 
 const updateUserInfo: APIGatewayProxyHandler = async (
   event: APIGatewayProxyEvent | any,
@@ -16,19 +16,19 @@ const updateUserInfo: APIGatewayProxyHandler = async (
     return {
       statusCode: 400,
       body: 'userInfo is empty',
-    }
+    };
   }
 
-  const user = await updateUser(event.body)
-  console.log(user)
+  const users = await updateUser(event.body);
+  console.log(users.Items[0]);
 
   return {
     statusCode: 200,
     headers: {
       'Access-Control-Allow-Origin': '*',
     },
-    body: JSON.stringify(user),
-  }
-}
+    body: JSON.stringify(users.Items[0]),
+  };
+};
 
-export const main = middyfy(updateUserInfo)
+export const main = middyfy(updateUserInfo);
