@@ -27,6 +27,7 @@ export class ChatWrapperComponent implements OnInit {
   };
   public messages: IMessage[] = [];
   public userInfo: IUserInfo = { name: '', userId: '', avatarUrl: '' };
+  public tempName: string | undefined = '';
 
   constructor(
     private wsService: WebsocketManagementService,
@@ -56,6 +57,7 @@ export class ChatWrapperComponent implements OnInit {
 
   public saveUserInfo(uploader: any) {
     if (this.userInfo.userId === '') return;
+    this.userInfo.name = this.tempName;
 
     if (this.fileToUpload) {
       this.userInformationService
@@ -134,6 +136,7 @@ export class ChatWrapperComponent implements OnInit {
 
   private setUserInfoValues(userInfo: IUserInfo) {
     this.userInfo = { ...this.userInfo, ...userInfo };
+    this.tempName = this.userInfo.name;
     this.message = {
       ...this.message,
       name: userInfo.name ?? this.message.name,
