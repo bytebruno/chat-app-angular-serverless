@@ -10,7 +10,7 @@ import { getPresignedImageUrl } from '../../business/FileStorageS3Business';
 import { middyfy } from '@libs/lambda';
 import { updateUserInfoAvatarUrl } from 'src/business/UserInfoBusiness';
 
-const logger = createLogger('todo');
+const logger = createLogger('chat');
 
 export const generateAvatarUploadUrl = async (
   event: APIGatewayProxyEvent,
@@ -26,7 +26,7 @@ export const generateAvatarUploadUrl = async (
 
   await updateUserInfoAvatarUrl(userId, imageId);
 
-  logger.info('todo IMAGE URL CREATED', {
+  logger.info('chat AVATAR URL CREATED', {
     userId: userId,
     imageId: imageId,
     date: new Date().toISOString,

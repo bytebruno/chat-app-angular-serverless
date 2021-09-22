@@ -2,6 +2,7 @@ import * as AWS from 'aws-sdk';
 import * as AWSXRay from 'aws-xray-sdk';
 
 import { DocumentClient } from 'aws-sdk/clients/dynamodb';
+import { IUserInfo } from 'src/models/iUserInfo';
 import { createLogger } from '../utils/logger';
 
 //const XAWS = AWSXRay.captureAWS(AWS);
@@ -38,7 +39,7 @@ export class UserInfoData {
     return user;
   }
 
-  async updateUserInfo(userInfo: any): Promise<any> {
+  async updateUserInfo(userInfo: IUserInfo): Promise<any> {
     await this.docClient
       .update({
         TableName: this.userInfoTable,

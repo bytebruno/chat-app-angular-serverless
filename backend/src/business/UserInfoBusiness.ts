@@ -1,4 +1,5 @@
-import { UserInfoData } from 'src/data/UserInfoData';
+import { IUserInfo } from '../models/iUserInfo';
+import { UserInfoData } from '../data/UserInfoData';
 
 const userInfoData = new UserInfoData();
 
@@ -10,7 +11,7 @@ export const createUserInfo = async (userId: string): Promise<any> => {
   return userInfoData.createUserInfo(userId);
 };
 
-export const updateUserInfo = async (userInfo: any): Promise<any> => {
+export const updateUserInfo = async (userInfo: IUserInfo): Promise<any> => {
   return userInfoData.updateUserInfo(userInfo);
 };
 
