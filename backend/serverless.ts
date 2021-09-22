@@ -20,6 +20,7 @@ const serverlessConfiguration: AWS = {
       stages: ['dev'],
       start: {
         port: 15002,
+        migrate: true
       },
     },
     s3: {
@@ -36,6 +37,7 @@ const serverlessConfiguration: AWS = {
     'serverless-offline',
     'serverless-dynamodb-local',
     'serverless-s3-local',
+    'serverless-iam-roles-per-function'
   ],
   package: {
     individually: true,

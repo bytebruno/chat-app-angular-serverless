@@ -11,7 +11,7 @@
             class="mr-2"
           ></p-avatar>
           <p-avatar
-            [image]="userInfo?.avatarUrl"
+            [image]="userInfo.avatarUrl"
             shape="circle"
             *ngIf="userInfo?.avatarUrl"
           ></p-avatar>
@@ -37,12 +37,7 @@
       ></ng-template>
       <p-scrollPanel #scp [style]="{ width: '100%', height: '50vh' }">
         <div *ngFor="let message of messages" class="mt-4">
-          <app-message-box
-            [name]="message.name"
-            [message]="message.message"
-            [mine]="message.mine"
-            [avatarUrl]="message.avatarUrl"
-          ></app-message-box>
+          <app-message-box [message]="message"></app-message-box>
         </div>
       </p-scrollPanel>
       <p-divider></p-divider>
@@ -83,15 +78,6 @@
       placeholder="Nickname"
       [(ngModel)]="userInfo.name"
     />
-    <!-- <p-fileUpload
-      mode="basic"
-      name="myfile[]"
-      [customUpload]="true"
-      accept="image/*"
-      [maxFileSize]="1000000"
-      chooseLabel="Change Avatar"
-      (uploadHandler)="handleFileInput($event)"
-    ></p-fileUpload> -->
   </div>
 
   <p-fileUpload

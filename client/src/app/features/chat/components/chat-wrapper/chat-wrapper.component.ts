@@ -1,6 +1,9 @@
 import { ChangeDetectorRef, Component, OnInit, ViewChild } from '@angular/core';
 
 import { AuthService } from '@auth0/auth0-angular';
+import { IMessage } from '../../models/iMessage';
+import { IUploadUrlResponse } from '../../models/iUploadUrlResponse';
+import { IUserInfo } from '../../models/iUserInfo';
 import { Router } from '@angular/router';
 import { UserInformationService } from '../../services/user-information.service';
 import { WebsocketManagementService } from '../../services/websocket-management.service';
@@ -17,17 +20,13 @@ export class ChatWrapperComponent implements OnInit {
   public showUpdateModal = false;
   public fileToUpload: File | null = null;
 
-  public message: {
-    name: string | undefined;
-    message: string;
-    avatarUrl: string;
-  } = {
+  public message: IMessage = {
     name: '',
     message: '',
     avatarUrl: '',
   };
-  public messages: any = [];
-  public userInfo: any = { name: '', userId: '', avatarUrl: null };
+  public messages: IMessage[] = [];
+  public userInfo: IUserInfo = { name: '', userId: '', avatarUrl: '' };
 
   constructor(
     private wsService: WebsocketManagementService,
@@ -62,7 +61,7 @@ export class ChatWrapperComponent implements OnInit {
       this.userInformationService
         .getUploadUrl()
         .pipe(
-          mergeMap((res) =>
+          mergeMap((res: IUploadUrlResponse) =>
             this.userInformationService.uploadFile(
               res.uploadUrl,
               this.fileToUpload
@@ -72,7 +71,7 @@ export class ChatWrapperComponent implements OnInit {
             return this.userInformationService.updateUserInfo(this.userInfo);
           })
         )
-        .subscribe((userinfo) => {
+        .subscribe((userinfo: IUserInfo) => {
           this.setUserInfoValues(userinfo);
           uploader.clear();
         });
@@ -92,13 +91,11 @@ export class ChatWrapperComponent implements OnInit {
   }
 
   public handleFileSelect(files: any) {
-    console.log(files[0]);
     this.fileToUpload = files[0];
   }
 
   public handleFileRemove() {
     this.fileToUpload = null;
-    console.log(this.fileToUpload);
   }
 
   private initializeWebsocketConnection() {
@@ -114,26 +111,28 @@ export class ChatWrapperComponent implements OnInit {
     return this;
   }
 
-  private processMessage(msg: any) {
+  private processMessage(msg: IMessage) {
     console.log('Process message: ', msg);
     if (msg.name === this.userInfo.name) {
-      msg.mine = true;
+      msg.isMine = true;
     }
     this.messages.push(msg);
     this.cd.detectChanges();
-    console.log(this.scrollContainer.calculateContainerHeight());
 
-    // this.scrollContainer.scrollTop = 100000;
-    // debugger;
+    this.scrollContainer.scrollTop(
+      this.scrollContainer.contentViewChild.nativeElement.scrollHeight
+    );
   }
 
   private retrieveUserInformation() {
-    this.userInformationService.getOneUserInfo().subscribe((userInfo: any) => {
-      this.setUserInfoValues(userInfo);
-    });
+    this.userInformationService
+      .getOneUserInfo()
+      .subscribe((userInfo: IUserInfo) => {
+        this.setUserInfoValues(userInfo);
+      });
   }
 
-  private setUserInfoValues(userInfo: any) {
+  private setUserInfoValues(userInfo: IUserInfo) {
     this.userInfo = { ...this.userInfo, ...userInfo };
     this.message = {
       ...this.message,
