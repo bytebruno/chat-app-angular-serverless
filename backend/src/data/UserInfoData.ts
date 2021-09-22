@@ -5,14 +5,13 @@ import { DocumentClient } from 'aws-sdk/clients/dynamodb';
 import { IUserInfo } from 'src/models/iUserInfo';
 import { createLogger } from '../utils/logger';
 
-//const XAWS = AWSXRay.captureAWS(AWS);
 const logger = createLogger('userInfo');
-
 export class UserInfoData {
   constructor(
-    private readonly docClient: DocumentClient = createDynamoDBClient(),
     private readonly userInfoTable = process.env.USER_INFO_TABLE,
     private readonly bucketName = process.env.AVATAR_IMAGE_S3_BUCKET,
+    private readonly docClient: DocumentClient = createDynamoDBClient(),
+    private readonly avatarUrl: string = createAvatarUrl(bucketName),
   ) {}
 
   async getOneUserInfo(userId: string): Promise<any> {
@@ -68,8 +67,7 @@ export class UserInfoData {
         },
         UpdateExpression: 'set #avatarUrl = :avatarUrl',
         ExpressionAttributeValues: {
-          //':avatarUrl': `https://${this.bucketName}.s3.amazonaws.com/${imageId}`,
-          ':avatarUrl': `http://localhost:4569/${this.bucketName}/${imageId}`, // remove comments to test locally
+          ':avatarUrl': `${this.avatarUrl}/${imageId}`,
         },
         ExpressionAttributeNames: {
           '#avatarUrl': 'avatarUrl',
@@ -79,16 +77,19 @@ export class UserInfoData {
   }
 }
 
-function createDynamoDBClient() {
-  // if (process.env.IS_OFFLINE) {
-  //   console.log('Creating a local DynamoDB instance');
-  //   return new XAWS.DynamoDB.DocumentClient({
-  //     region: 'localhost',
-  //     endpoint: 'http://localhost:15002',
-  //   });
-  // }
+const createDynamoDBClient = () => {
+  if (process.env.IS_OFFLINE) {
+    console.log('Creating userInfo local DynamoDB instance');
+    return new AWS.DynamoDB.DocumentClient({
+      endpoint: 'http://localhost:15002',
+    });
+  }
 
-  return new AWS.DynamoDB.DocumentClient({
-    endpoint: 'http://localhost:15002',
-  });
-}
+  const XAWS = AWSXRay.captureAWS(AWS);
+  return new XAWS.DynamoDB.DocumentClient();
+};
+
+const createAvatarUrl = (bucketName: string) => {
+  if (process.env.IS_OFFLINE) return `http://localhost:4569/${bucketName}`;
+  return `https://${bucketName}.s3.amazonaws.com`;
+};

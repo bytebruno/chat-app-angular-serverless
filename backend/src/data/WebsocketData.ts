@@ -44,11 +44,10 @@ const createApiGatewayManagementApi = (stage: string, apiId: string) => {
     endpoint: `${apiId}.execute-api.us-east-1.amazonaws.com/${stage}`,
   }
 
-  // if (process.env.IS_OFFLINE) {
-  console.log('Creating a local createApiGatewayManagementApi instance')
-  connectionParams.endpoint = `http://localhost:3001`
-  return new AWS.ApiGatewayManagementApi(connectionParams)
-  // }
+  if (process.env.IS_OFFLINE) {
+    console.log('Creating a local createApiGatewayManagementApi instance')
+    connectionParams.endpoint = `http://localhost:3001`
+  }
 
   return new AWS.ApiGatewayManagementApi(connectionParams)
 }

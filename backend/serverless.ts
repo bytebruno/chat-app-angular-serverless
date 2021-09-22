@@ -20,7 +20,7 @@ const serverlessConfiguration: AWS = {
       stages: ['dev'],
       start: {
         port: 15002,
-        migrate: true
+        migrate: true,
       },
     },
     s3: {
@@ -37,7 +37,7 @@ const serverlessConfiguration: AWS = {
     'serverless-offline',
     'serverless-dynamodb-local',
     'serverless-s3-local',
-    'serverless-iam-roles-per-function'
+    'serverless-iam-roles-per-function',
   ],
   package: {
     individually: true,
@@ -47,10 +47,10 @@ const serverlessConfiguration: AWS = {
     runtime: 'nodejs14.x',
     stage: 'dev',
     region: 'us-east-1',
-    // tracing: {
-    //   lambda: true,
-    //   apiGateway: true,
-    // },
+    tracing: {
+      lambda: true,
+      apiGateway: true,
+    },
     apiGateway: {
       minimumCompressionSize: 1024,
       shouldStartNameWithService: true,
@@ -64,7 +64,6 @@ const serverlessConfiguration: AWS = {
     },
     lambdaHashingVersion: '20201221',
   },
-  // import the function via paths
   functions: {
     auth,
     hello,

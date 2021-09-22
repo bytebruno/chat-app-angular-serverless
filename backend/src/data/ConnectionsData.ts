@@ -4,7 +4,6 @@ import * as AWSXRay from 'aws-xray-sdk';
 import { DocumentClient } from 'aws-sdk/clients/dynamodb';
 import { createLogger } from '../utils/logger';
 
-//const XAWS = AWSXRay.captureAWS(AWS);
 const logger = createLogger('connections');
 
 export class ConnectionsData {
@@ -61,16 +60,14 @@ export class ConnectionsData {
   }
 }
 
-function createDynamoDBClient() {
-  // if (process.env.IS_OFFLINE) {
-  //   console.log('Creating a local DynamoDB instance');
-  //   return new XAWS.DynamoDB.DocumentClient({
-  //     region: 'localhost',
-  //     endpoint: 'http://localhost:15002',
-  //   });
-  // }
+const createDynamoDBClient = () => {
+  if (process.env.IS_OFFLINE) {
+    console.log('Creating connections local DynamoDB instance');
+    return new AWS.DynamoDB.DocumentClient({
+      endpoint: 'http://localhost:15002',
+    });
+  }
 
-  return new AWS.DynamoDB.DocumentClient({
-    endpoint: 'http://localhost:15002',
-  });
-}
+  const XAWS = AWSXRay.captureAWS(AWS);
+  return new XAWS.DynamoDB.DocumentClient();
+};
