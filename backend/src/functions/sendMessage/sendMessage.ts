@@ -1,7 +1,5 @@
 import 'source-map-support/register';
 
-import * as AWS from 'aws-sdk';
-
 import {
   APIGatewayProxyEvent,
   APIGatewayProxyHandler,
@@ -38,6 +36,10 @@ const sendMessage: APIGatewayProxyHandler = async (
 
   return {
     statusCode: 200,
+    headers: {
+      'Access-Control-Allow-Origin': '*',
+      'Access-Control-Allow-Credentials': true,
+    },
     body: '',
   };
 };

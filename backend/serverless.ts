@@ -4,12 +4,11 @@ import connect from '@functions/connect';
 import disconnect from '@functions/disconnect';
 import generateAvatarUploadUrl from '@functions/generateAvatarUploadUrl';
 import handleUserLogin from '@functions/handleUserLogin';
-import hello from '@functions/hello';
 import sendMessage from '@functions/sendMessage';
 import updateUserInfo from '@functions/updateUserInfo';
 
 const serverlessConfiguration: AWS = {
-  service: 'backend',
+  service: 'chat-app-backend',
   frameworkVersion: '2',
   custom: {
     webpack: {
@@ -59,14 +58,25 @@ const serverlessConfiguration: AWS = {
       AWS_NODEJS_CONNECTION_REUSE_ENABLED: '1',
       CONNECTIONS_TABLE: 'Connections-${self:provider.stage}',
       USER_INFO_TABLE: 'UserInfo-${self:provider.stage}',
-      AVATAR_IMAGE_S3_BUCKET: 'AvatarImage-chat-app-${self:provider.stage}',
+      AVATAR_IMAGE_S3_BUCKET:
+        'avatar-image-chat-app-bytebruno${self:provider.stage}',
       SIGNED_URL_EXPIRATION: '300',
     },
     lambdaHashingVersion: '20201221',
+    iam: {
+      role: {
+        statements: [
+          {
+            Effect: 'Allow',
+            Action: ['xray:PutTelemetryRecords', 'xray:PutTraceSegments'],
+            Resource: '*',
+          },
+        ],
+      },
+    },
   },
   functions: {
     auth,
-    hello,
     connect,
     disconnect,
     sendMessage,
@@ -76,6 +86,19 @@ const serverlessConfiguration: AWS = {
   },
   resources: {
     Resources: {
+      GatewayResponseDefault4XX: {
+        Type: 'AWS::ApiGateway::GatewayResponse',
+        Properties: {
+          ResponseParameters: {
+            'gatewayresponse.header.Access-Control-Allow-Origin': "'*'",
+            'gatewayresponse.header.Access-Control-Allow-Headers': "'*'",
+          },
+          ResponseType: 'DEFAULT_4XX',
+          RestApiId: {
+            Ref: 'ApiGatewayRestApi',
+          },
+        },
+      },
       ConnectionsDynamoDBTable: {
         Type: 'AWS::DynamoDB::Table',
         Properties: {

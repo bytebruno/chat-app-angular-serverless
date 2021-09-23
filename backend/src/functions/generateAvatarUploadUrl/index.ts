@@ -8,6 +8,7 @@ export default {
         method: 'get',
         path: 'user/avatar',
         authorizer: 'auth',
+        cors: true,
       },
     },
   ],
@@ -20,7 +21,7 @@ export default {
     },
     {
       Effect: 'Allow',
-      Action: ['dynamodb:Update'],
+      Action: ['dynamodb:UpdateItem'],
       Resource:
         'arn:aws:dynamodb:${self:provider.region}:*:table/${self:provider.environment.USER_INFO_TABLE}',
     },

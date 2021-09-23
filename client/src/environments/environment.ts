@@ -6,15 +6,14 @@ export const environment = {
   production: false,
   auth0Domain: 'dev-iubhvavp.us.auth0.com',
   auth0ClientId: 'wanWJnwVUzARKvRHiF7sTcweYBapWgth',
+
+  // LOCAL - SERVERLESS OFFLINE VARIABLES
   apiUrl: 'http://localhost:15001/dev',
   websocketUrl: 'ws://localhost:3001',
-};
+  // END LOCAL - SERVERLESS OFFLINE VARIABLES
 
-/*
- * For easier debugging in development mode, you can import the following file
- * to ignore zone related error stack frames such as `zone.run`, `zoneDelegate.invokeTask`.
- *
- * This import should be commented out in production mode because it will have a negative impact
- * on performance if an error is thrown.
- */
-// import 'zone.js/plugins/zone-error';  // Included with Angular CLI.
+  // ****** CHANGE HERE ****** AWS - SERVERLESS VARIABLES
+  // apiUrl: 'https://av5ilbz43a.execute-api.us-east-1.amazonaws.com/dev',
+  // websocketUrl: 'wss://hwcnzkduyh.execute-api.us-east-1.amazonaws.com/dev',
+  // END AWS - SERVERLESS VARIABLES
+};

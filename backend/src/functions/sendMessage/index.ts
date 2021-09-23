@@ -1,4 +1,4 @@
-import { handlerPath } from '@libs/handlerResolver'
+import { handlerPath } from '@libs/handlerResolver';
 
 export default {
   handler: `${handlerPath(__dirname)}/sendMessage.main`,
@@ -20,5 +20,21 @@ export default {
       Resource:
         'arn:aws:dynamodb:${self:provider.region}:*:table/${self:provider.environment.CONNECTIONS_TABLE}',
     },
+    {
+      Effect: 'Allow',
+      Action: ['execute-api:Invoke', 'execute-api:ManageConnections'],
+      Resource: {
+        'Fn::Join': [
+          '',
+          [
+            'arn:aws:execute-api:${self:provider.region}:',
+            { Ref: 'AWS::AccountId' },
+            ':',
+            { Ref: 'WebsocketsApi' },
+            '/${self:provider.stage}/*',
+          ],
+        ],
+      },
+    },
   ],
-}
+};

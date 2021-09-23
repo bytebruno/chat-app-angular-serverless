@@ -22,12 +22,13 @@ const connect: APIGatewayProxyHandler = async (
     timestamp,
   };
 
-  await createConnectionId(item)
+  await createConnectionId(item);
 
   return {
     statusCode: 200,
     headers: {
       'Access-Control-Allow-Origin': '*',
+      'Access-Control-Allow-Credentials': true,
     },
     body: '',
   };

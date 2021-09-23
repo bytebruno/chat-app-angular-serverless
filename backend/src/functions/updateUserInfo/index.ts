@@ -1,4 +1,4 @@
-import { handlerPath } from '@libs/handlerResolver'
+import { handlerPath } from '@libs/handlerResolver';
 
 export default {
   handler: `${handlerPath(__dirname)}/updateUserInfo.main`,
@@ -8,15 +8,16 @@ export default {
         method: 'post',
         path: 'user',
         authorizer: 'auth',
+        cors: true,
       },
     },
   ],
   iamRoleStatements: [
     {
       Effect: 'Allow',
-      Action: ['dynamodb:Update'],
+      Action: ['dynamodb:UpdateItem', 'dynamodb:Query'],
       Resource:
         'arn:aws:dynamodb:${self:provider.region}:*:table/${self:provider.environment.USER_INFO_TABLE}',
     },
   ],
-}
+};
