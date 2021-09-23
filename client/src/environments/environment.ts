@@ -8,12 +8,12 @@ export const environment = {
   auth0ClientId: 'wanWJnwVUzARKvRHiF7sTcweYBapWgth',
 
   // LOCAL - SERVERLESS OFFLINE VARIABLES
-  apiUrl: 'http://localhost:15001/dev',
-  websocketUrl: 'ws://localhost:3001',
+  // apiUrl: 'http://localhost:15001/dev',
+  // websocketUrl: 'ws://localhost:3001',
   // END LOCAL - SERVERLESS OFFLINE VARIABLES
 
   // ****** CHANGE HERE ****** AWS - SERVERLESS VARIABLES
-  // apiUrl: 'https://av5ilbz43a.execute-api.us-east-1.amazonaws.com/dev',
-  // websocketUrl: 'wss://hwcnzkduyh.execute-api.us-east-1.amazonaws.com/dev',
+  apiUrl: 'https://ff1p9desc7.execute-api.us-east-1.amazonaws.com/dev',
+  websocketUrl: 'wss://50s7cthnz4.execute-api.us-east-1.amazonaws.com/dev',
   // END AWS - SERVERLESS VARIABLES
 };

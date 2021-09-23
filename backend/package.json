@@ -10,6 +10,7 @@
   "scripts": {
     "start": "npm run offline",
     "offline": "sls offline start",
+    "deploy": "sls deploy",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "engines": {
