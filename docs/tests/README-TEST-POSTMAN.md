@@ -4,11 +4,12 @@
 
  - Import **Chat-App.postman_collection.json** at `docs/tests` on Postman
  - On browser development tools, **COPY** the token that is printed in the console after you log in.
- - Token image example:
-	  ![JWT Token](screenshots/postman-01.png)
+ - Token image example:   
+ ![JWT Token](screenshots/postman-01.png)
 - Paste your jwt token in the value field of **token** variable on your recently imported collection.
--  Collection variables image example:
-	  ![Postman collection variables](screenshots/postman-02.png)
+-  Collection variables image example:   
+
+![Postman collection variables](screenshots/postman-02.png)
 
 ## Postman Requests
 - Get UserInfo request:
