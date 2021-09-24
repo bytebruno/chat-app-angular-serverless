@@ -34,7 +34,10 @@ Chat app example using Angular and AWS serverless infrastructure.
 - Change **apiUrl** and **websocketUrl** environment variables at `src/environments/environment.ts` **to match your local or deployed serverless api urls**.
 - Start local angular app  - `npm start`
 - Your local client will be running at `http://localhost:4200`
-Extra: You can test with more users loging in different browsers.
+- Extra: You can test with more users loging in different browsers.
+
+## Testing on Postman
+#### See here [README-TEST-POSTMAN](https://github.com/bytebruno/chat-app-angular-serverless/blob/master/docs/tests/README-TEST-POSTMAN.md)
 
 ## Technologies
 
