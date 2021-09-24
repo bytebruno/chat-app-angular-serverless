@@ -45,3 +45,10 @@ Chat app example using Angular and AWS serverless infrastructure.
 - Serverless Framework
 - Angular 12
 - PrimeNg
+
+## What was I going to do next?
+
+- Show an event on chat when users connects or disconnects;
+- Handle websocket disconnection;
+- Unit tests;
+- Implement some state management on client, possibly NGRX;
