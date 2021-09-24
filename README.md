@@ -48,6 +48,7 @@ Chat app example using Angular and AWS serverless infrastructure.
 
 ## What was I going to do next?
 
+- Add more logs;
 - Show an event on chat when users connects or disconnects;
 - Handle websocket disconnection;
 - Unit tests;
