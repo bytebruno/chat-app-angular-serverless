@@ -24,3 +24,19 @@
 		-  Click on select file and choose an image
 		-  Click on Send to upload to S3
 		 ![Get SignedUrl for avatar upload](screenshots/postman-06.png)
+
+
+## Postman Websocket
+I could not save websocket testing configuration on this collection, please follow the steps bellow:
+- Click on **New** and choose **Websocket request** on postman
+- Set the **websocket url** and click on connect
+- ![Connect websocket on postman](screenshots/postman-07.png)
+- You can send a message pasting this json on compose message: 
+`{
+"action": "sendMessage",
+"message": "Testing send message",
+"name": "Bruno Rodrigues"
+}`   
+![Sending a websocket message on postman](screenshots/postman-08.png)
+- If your client is open on browser, you will see this message on the chat app.
+- You could also test with `wscat -c ws://localhost:3001` if you prefer.
